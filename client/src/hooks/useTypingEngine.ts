@@ -9,11 +9,12 @@ export interface TypingStats {
     chars: number;
 }
 
-export const useTypingEngine = (text: string, duration: number = 30) => {
+export const useTypingEngine = (text: string, duration: number = 30, difficulty: 'normal' | 'expert' | 'master' = 'normal') => {
     const [userInput, setUserInput] = useState('');
     const [startTime, setStartTime] = useState<number | null>(null);
     const [endTime, setEndTime] = useState<number | null>(null);
     const [isFinished, setIsFinished] = useState(false);
+    const [isFailed, setIsFailed] = useState(false);
     const [stats, setStats] = useState<TypingStats>({
         wpm: 0,
         accuracy: 0,
@@ -30,6 +31,7 @@ export const useTypingEngine = (text: string, duration: number = 30) => {
         setStartTime(null);
         setEndTime(null);
         setIsFinished(false);
+        setIsFailed(false);
         setStats({
             wpm: 0,
             accuracy: 0,
@@ -91,7 +93,7 @@ export const useTypingEngine = (text: string, duration: number = 30) => {
     }, [startTime, isFinished, duration, calculateStats]);
 
     const handleKeyDown = (char: string) => {
-        if (isFinished) return;
+        if (isFinished || isFailed) return;
 
         if (!startTime) {
             setStartTime(Date.now());
@@ -100,6 +102,34 @@ export const useTypingEngine = (text: string, duration: number = 30) => {
         if (char === 'Backspace') {
             setUserInput(prev => prev.slice(0, -1));
         } else if (char.length === 1) {
+            const currentIdx = userInput.length;
+            const expectedChar = text[currentIdx];
+
+            // Master mode: Fail on any mistype
+            if (difficulty === 'master' && char !== expectedChar) {
+                setIsFailed(true);
+                setIsFinished(true);
+                setEndTime(Date.now());
+                return;
+            }
+
+            // Expert mode: Fail on space if current word is incorrect
+            if (difficulty === 'expert' && char === ' ') {
+                const words = text.split(' ');
+                const inputWords = (userInput + char).split(' ');
+                const currentWordIdx = inputWords.length - 2; // -2 because we just added space
+                if (currentWordIdx >= 0) {
+                    const originalWord = words[currentWordIdx];
+                    const typedWord = inputWords[currentWordIdx];
+                    if (originalWord !== typedWord) {
+                        setIsFailed(true);
+                        setIsFinished(true);
+                        setEndTime(Date.now());
+                        return;
+                    }
+                }
+            }
+
             setUserInput(prev => prev + char);
             if (userInput.length + 1 >= text.length) {
                 setEndTime(Date.now());
@@ -111,6 +141,7 @@ export const useTypingEngine = (text: string, duration: number = 30) => {
     return {
         userInput,
         isFinished,
+        isFailed,
         stats,
         handleKeyDown,
         reset,

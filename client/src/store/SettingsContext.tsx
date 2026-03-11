@@ -2,12 +2,15 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export type Theme = 'default' | 'dracula' | 'light' | 'carbon';
 export type CaretStyle = 'line' | 'block' | 'underline' | 'hidden';
+export type Difficulty = 'normal' | 'expert' | 'master';
+export type QuickRestartKey = 'off' | 'tab' | 'esc' | 'enter';
 
 interface Settings {
     theme: Theme;
     fontSize: number;
     caretStyle: CaretStyle;
-    quickRestart: boolean;
+    difficulty: Difficulty;
+    quickRestart: QuickRestartKey;
     blindMode: boolean;
 }
 
@@ -15,7 +18,8 @@ interface SettingsContextType extends Settings {
     setTheme: (theme: Theme) => void;
     setFontSize: (size: number) => void;
     setCaretStyle: (style: CaretStyle) => void;
-    setQuickRestart: (value: boolean) => void;
+    setDifficulty: (diff: Difficulty) => void;
+    setQuickRestart: (key: QuickRestartKey) => void;
     setBlindMode: (value: boolean) => void;
 }
 
@@ -35,7 +39,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             theme: (localStorage.getItem('theme') as Theme) || 'default',
             fontSize: 32,
             caretStyle: 'line',
-            quickRestart: true,
+            difficulty: 'normal',
+            quickRestart: 'tab',
             blindMode: false
         };
     });
@@ -51,7 +56,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const setTheme = (theme: Theme) => updateSetting('theme', theme);
     const setFontSize = (fontSize: number) => updateSetting('fontSize', fontSize);
     const setCaretStyle = (caretStyle: CaretStyle) => updateSetting('caretStyle', caretStyle);
-    const setQuickRestart = (quickRestart: boolean) => updateSetting('quickRestart', quickRestart);
+    const setDifficulty = (difficulty: Difficulty) => updateSetting('difficulty', difficulty);
+    const setQuickRestart = (quickRestart: QuickRestartKey) => updateSetting('quickRestart', quickRestart);
     const setBlindMode = (blindMode: boolean) => updateSetting('blindMode', blindMode);
 
     useEffect(() => {
@@ -64,6 +70,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             setTheme,
             setFontSize,
             setCaretStyle,
+            setDifficulty,
             setQuickRestart,
             setBlindMode
         }}>

@@ -8,8 +8,8 @@ interface TypingTestProps {
 }
 
 const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
-    const { userInput, isFinished, stats, handleKeyDown, reset, timeLeft } = useTypingEngine(text);
-    const { fontSize, caretStyle, blindMode, quickRestart } = useSettings();
+    const { fontSize, caretStyle, blindMode, quickRestart, difficulty } = useSettings();
+    const { userInput, isFinished, isFailed, stats, handleKeyDown, reset, timeLeft } = useTypingEngine(text, 30, difficulty);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -18,16 +18,19 @@ const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
         focusInput();
 
         const handleGlobalKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Tab' && quickRestart) {
+            const isRestartKey =
+                (quickRestart === 'tab' && e.key === 'Tab') ||
+                (quickRestart === 'enter' && e.key === 'Enter' && (e.target as HTMLElement).tagName !== 'BUTTON') ||
+                (quickRestart === 'esc' && e.key === 'Escape');
+
+            if (isRestartKey) {
                 e.preventDefault();
                 reset();
                 return;
             }
+
             if (e.key === 'Tab') {
                 e.preventDefault();
-            }
-            if (e.key === 'Enter' && (e.target as HTMLElement).tagName !== 'BUTTON') {
-                reset();
             }
         };
         window.addEventListener('keydown', handleGlobalKeyDown);
@@ -74,11 +77,18 @@ const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
 
     if (isFinished) {
         return (
-            <div className="max-w-6xl mx-auto flex flex-col items-center justify-center min-h-[70vh] animate-in fade-in zoom-in-95 duration-500 w-full">
+            <div className={`max-w-6xl mx-auto flex flex-col items-center justify-center min-h-[70vh] animate-in fade-in zoom-in-95 duration-500 w-full ${isFailed ? 'bg-red-500/5' : ''}`}>
+                {isFailed && (
+                    <div className="mb-10 text-4xl font-black uppercase tracking-[0.5em] text-red-500 animate-pulse">
+                        test failed
+                    </div>
+                )}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20 w-full max-w-5xl">
                     <div className="flex flex-col items-start border-l-2 border-sub-color pl-6 transition-all hover:translate-x-1">
                         <span className="text-xl font-bold uppercase tracking-widest opacity-40 mb-2" style={{ color: 'var(--sub-color)' }}>wpm</span>
-                        <span className="text-8xl font-bold leading-none tracking-tighter" style={{ color: 'var(--main-color)' }}>{stats.wpm}</span>
+                        <span className="text-8xl font-bold leading-none tracking-tighter" style={{ color: isFailed ? 'var(--sub-color)' : 'var(--main-color)' }}>
+                            {isFailed ? '-' : stats.wpm}
+                        </span>
                     </div>
                     <div className="flex flex-col items-start border-l-2 border-sub-color pl-6 transition-all hover:translate-x-1">
                         <span className="text-xl font-bold uppercase tracking-widest opacity-40 mb-2" style={{ color: 'var(--sub-color)' }}>acc</span>
