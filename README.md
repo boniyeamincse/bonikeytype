@@ -1,5 +1,8 @@
 # BoniKeytype ⌨️
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 A premium full-stack typing practice platform similar to Monkeytype, featuring real-time multiplayer races, detailed statistics, and customizable themes.
 
 ## 🚀 Features
@@ -88,6 +91,10 @@ npm run seed
 - `server/db/`: SQL schema and database configurations.
 - `server/src/sockets/`: Real-time race logic.
 
+## 🤝 Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
+
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
