@@ -3,7 +3,7 @@
 ## Base URL
 
 ```
-http://localhost:3000/api
+http://localhost:5000/api
 ```
 
 ---
@@ -16,7 +16,7 @@ All protected routes require a JWT in the `Authorization` header:
 Authorization: Bearer <token>
 ```
 
-Tokens are issued on login and expire after **7 days**.
+Tokens are issued on login and expire after **24 hours**.
 
 ---
 
@@ -30,7 +30,7 @@ Register a new user.
 **Body:**
 ```json
 {
-  "name": "Boni",
+  "username": "Boni",
   "email": "boni@example.com",
   "password": "securepassword"
 }
@@ -40,7 +40,7 @@ Register a new user.
 ```json
 {
   "token": "eyJhbGci...",
-  "user": { "id": 1, "name": "Boni", "email": "boni@example.com" }
+  "user": { "id": 1, "username": "Boni", "email": "boni@example.com" }
 }
 ```
 
@@ -69,21 +69,17 @@ Login with email and password.
 
 ### User
 
-#### `GET /user/profile` 🔒
-Returns the authenticated user's profile and aggregate stats.
+#### `GET /auth/me` 🔒
+Returns the authenticated user's profile and current level/xp.
 
 **Response `200`:**
 ```json
 {
   "id": 1,
-  "name": "Boni",
+  "username": "Boni",
   "email": "boni@example.com",
-  "stats": {
-    "total_tests": 42,
-    "best_wpm": 118,
-    "avg_wpm": 94,
-    "avg_accuracy": 97.4
-  }
+  "level": 1,
+  "xp": 150
 }
 ```
 
@@ -91,7 +87,7 @@ Returns the authenticated user's profile and aggregate stats.
 
 ### Typing
 
-#### `POST /typing` 🔒
+#### `POST /stats/save` 🔒
 Save a completed typing test result.
 
 **Body:**
@@ -99,47 +95,44 @@ Save a completed typing test result.
 {
   "wpm": 105,
   "accuracy": 98.2,
-  "errors": 3,
   "mode": "timer",
-  "language": "english"
+  "modeValue": "60"
 }
 ```
 
 **Response `201`:**
 ```json
 {
-  "id": 88,
-  "message": "Test saved successfully"
+  "message": "Test result saved successfully",
+  "xpGained": 85,
+  "levelUp": false
 }
 ```
 
 ---
 
-#### `GET /typing/history` 🔒
-Returns paginated test history for the authenticated user.
+#### `GET /stats/history` 🔒
+Returns test history for the authenticated user.
 
-**Query Params:**
-```
-?page=1&limit=20&mode=timer
+**Response `200`:**
+```json
+[
+  { "wpm": 85, "accuracy": 98, "mode": "timer", "mode_value": "30", "created_at": "..." }
+]
 ```
 
 ---
 
 ### Leaderboard
 
-#### `GET /leaderboard`
-Fetch the global leaderboard.
-
-**Query Params:**
-```
-?type=global|daily|friends&limit=50
-```
+#### `GET /stats/leaderboard`
+Fetch the all-time global leaderboard.
 
 **Response `200`:**
 ```json
 [
-  { "rank": 1, "user": "speedster99", "best_wpm": 180, "accuracy": 99.1 },
-  { "rank": 2, "user": "Boni", "best_wpm": 118, "accuracy": 97.4 }
+  { "username": "speedster99", "best_wpm": 180 },
+  { "username": "Boni", "best_wpm": 118 }
 ]
 ```
 
@@ -147,21 +140,15 @@ Fetch the global leaderboard.
 
 ### Quotes
 
-#### `GET /quotes`
+#### `GET /quotes/random`
 Fetch a random quote for the typing test.
-
-**Query Params:**
-```
-?language=english&length=short|medium|long
-```
 
 **Response `200`:**
 ```json
 {
   "id": 12,
   "text": "The quick brown fox jumps over the lazy dog.",
-  "author": "Unknown",
-  "language": "english"
+  "author": "Unknown"
 }
 ```
 
