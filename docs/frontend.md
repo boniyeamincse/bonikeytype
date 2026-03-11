@@ -21,22 +21,18 @@ Standard auth forms with field validation. On successful login, JWT is stored in
 
 ## Key Components
 
-### `TypingBox`
+### `TypingTest.tsx`
 The main input area.
 
 - Renders word list as individual `<span>` elements
-- Applies CSS classes: `correct`, `incorrect`, `current`, `extra`
+- Applies CSS classes: `correct`, `incorrect`, `untyped`, `extra`
 - Hidden `<input>` captures keystrokes
-- Prevents paste (security + fairness)
 - Handles backspace, space, and all printable characters
 
 **Props:**
 ```jsx
-<TypingBox
-  words={string[]}
-  onComplete={(stats) => void}
-  mode="timer" | "words" | "quote" | "custom"
-  duration={30}  // seconds, for timer mode
+<TypingTest
+  text={string}
 />
 ```
 
@@ -90,16 +86,15 @@ Manages countdown or elapsed timer. Returns `timeLeft` or `timeElapsed` and a `s
 
 ## State Management
 
-Global state is minimal. The app uses:
-- **React Context** (`AuthContext`) for user session
-- **Local component state** for typing engine, timer, and settings
-- **No Redux** — not necessary at this scale
+The app uses:
+- **LocalStorage**: For persisting JWT token, User profile, and Theme preference.
+- **React Context** (`ThemeContext`): For managing the active UI theme.
+- **Custom Hooks** (`useTypingEngine`): For localized typing state.
 
 ---
 
 ## Styling Notes
 
-- TailwindCSS utility classes throughout
-- Dark/light mode via `class="dark"` on `<html>` (Tailwind dark mode: `class` strategy)
-- Custom font variables set via CSS variables, switched by settings selection
-- Animations for caret blink and result reveal via Tailwind `animate-*` utilities
+- TailwindCSS with `@tailwindcss/postcss`.
+- **Custom Themes**: Defined in `index.css` via CSS variables (`--main-color`, `--bg-color`, etc.).
+- **Transitions**: Smooth transitions between themes and UI states.
