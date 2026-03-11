@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,11 +16,12 @@
 
 [data-theme='dracula'] {
   --bg-color: #282a36;
-  --main-color: #f1fa8c;
-  --caret-color: #f1fa8c;
+  --main-color: #bd93f9;
+  --caret-color: #bd93f9;
   --sub-color: #6272a4;
   --text-color: #f8f8f2;
   --error-color: #ff5555;
+  --error-extra-color: #bd2c2c;
 }
 
 [data-theme='light'] {
@@ -28,6 +31,7 @@
   --sub-color: #999999;
   --text-color: #000000;
   --error-color: #d40000;
+  --error-extra-color: #9b0000;
 }
 
 [data-theme='carbon'] {
@@ -37,6 +41,7 @@
   --sub-color: #525252;
   --text-color: #f5f5f5;
   --error-color: #ff3c3c;
+  --error-extra-color: #ae1d1d;
 }
 
 * {
@@ -49,7 +54,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: 'Inter', sans-serif;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition: all 0.25s ease;
   min-height: 100vh;
 }
 
@@ -58,14 +63,15 @@ body {
 }
 
 .typing-text {
-  font-size: 1.5rem;
+  font-size: 2rem;
   line-height: 1.5;
-  word-spacing: 0.2em;
+  word-spacing: 0.3em;
 }
 
 .char {
   position: relative;
   transition: color 0.1s ease;
+  user-select: none;
 }
 
 .char.correct {
@@ -74,7 +80,7 @@ body {
 
 .char.incorrect {
   color: var(--error-color);
-  border-bottom: 1px solid var(--error-color);
+  border-bottom: 2px solid var(--error-color);
 }
 
 .char.extra {
@@ -90,9 +96,10 @@ body {
   width: 2px;
   height: 1.2em;
   background-color: var(--caret-color);
-  left: 0;
-  top: 0.1em;
-  animation: blink 1s infinite;
+  left: -1px;
+  top: 0.15em;
+  animation: blink 1s step-end infinite;
+  transition: transform 0.1s ease-out;
 }
 
 @keyframes blink {
@@ -113,5 +120,23 @@ button {
 }
 
 button:hover {
-  color: var(--main-color);
+  color: var(--main-color) !important;
+}
+
+/* Scrollbar styling for a cleaner look */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sub-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--main-color);
 }

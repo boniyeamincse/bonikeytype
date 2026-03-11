@@ -6,44 +6,49 @@ const Header: React.FC = () => {
     const { theme, setTheme } = useTheme();
 
     return (
-        <header className="max-w-6xl mx-auto py-8 px-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-                <h1 className="text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--main-color)' }}>
-                    <Keyboard size={32} />
-                    <span>bonikeytype</span>
-                </h1>
+        <header className="max-w-6xl mx-auto py-10 px-6 flex items-center justify-between animate-in fade-in duration-700">
+            <div className="flex items-center gap-8">
+                <Link to="/" className="flex items-center gap-3 group transition-all">
+                    <Keyboard size={28} style={{ color: 'var(--main-color)' }} className="group-hover:scale-110 transition-transform" />
+                    <div className="flex flex-col leading-none">
+                        <span className="text-xs uppercase tracking-widest opacity-50 font-bold" style={{ color: 'var(--sub-color)' }}>monkey see</span>
+                        <span className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-color)' }}>bonikeytype</span>
+                    </div>
+                </Link>
 
-                <nav className="flex items-center gap-6 ml-8 text-sub">
-                    <Link to="/" className="hover:text-text transition-colors flex items-center gap-1" style={{ color: 'var(--sub-color)' }}>
-                        <Keyboard size={18} />
+                <nav className="flex items-center gap-8 ml-4">
+                    <Link to="/" title="typing test" className="hover:text-text transition-all" style={{ color: 'var(--sub-color)' }}>
+                        <Keyboard size={20} />
                     </Link>
-                    <Link to="/multiplayer" className="hover:text-text transition-colors flex items-center gap-1" style={{ color: 'var(--sub-color)' }}>
-                        <Swords size={18} />
+                    <Link to="/multiplayer" title="multiplayer" className="hover:text-text transition-all" style={{ color: 'var(--sub-color)' }}>
+                        <Swords size={20} />
                     </Link>
-                    <Link to="/leaderboard" className="hover:text-text transition-colors flex items-center gap-1" style={{ color: 'var(--sub-color)' }}>
-                        <Trophy size={18} />
+                    <Link to="/leaderboard" title="leaderboard" className="hover:text-text transition-all" style={{ color: 'var(--sub-color)' }}>
+                        <Trophy size={20} />
                     </Link>
-                    <Link to="/profile" className="hover:text-text transition-colors flex items-center gap-1" style={{ color: 'var(--sub-color)' }}>
-                        <User size={18} />
+                    <Link to="/profile" title="profile" className="hover:text-text transition-all" style={{ color: 'var(--sub-color)' }}>
+                        <User size={20} />
                     </Link>
-                    <Link to="/settings" className="hover:text-text transition-colors flex items-center gap-1" style={{ color: 'var(--sub-color)' }}>
-                        <SettingsIcon size={18} />
+                    <Link to="/settings" title="settings" className="hover:text-text transition-all" style={{ color: 'var(--sub-color)' }}>
+                        <SettingsIcon size={20} />
                     </Link>
                 </nav>
             </div>
 
-            <div className="flex items-center gap-4">
-                <select
-                    value={theme}
-                    onChange={(e) => setTheme(e.target.value as any)}
-                    className="bg-transparent border-none text-sm outline-none cursor-pointer"
-                    style={{ color: 'var(--sub-color)' }}
-                >
-                    <option value="default">default</option>
-                    <option value="dracula">dracula</option>
-                    <option value="light">light</option>
-                    <option value="carbon">carbon</option>
-                </select>
+            <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                    <select
+                        value={theme}
+                        onChange={(e) => setTheme(e.target.value as any)}
+                        className="bg-transparent border-none text-xs uppercase font-bold tracking-widest outline-none cursor-pointer hover:opacity-100 opacity-50 transition-opacity"
+                        style={{ color: 'var(--sub-color)' }}
+                    >
+                        <option value="default" className="bg-[#323437]">serika dark</option>
+                        <option value="dracula" className="bg-[#282a36]">dracula</option>
+                        <option value="light" className="bg-[#ffffff]">light</option>
+                        <option value="carbon" className="bg-[#161616]">carbon</option>
+                    </select>
+                </div>
             </div>
         </header>
     );
