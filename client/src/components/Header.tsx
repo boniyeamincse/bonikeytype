@@ -12,7 +12,8 @@ const Header: React.FC = () => {
                     <img
                         src="/assets/logo.png"
                         alt="BoniTypes Logo"
-                        className="w-7 h-7 group-hover:scale-110 transition-transform object-contain mix-blend-screen"
+                        style={{ height: '2rem', width: 'auto', mixBlendMode: 'screen' }}
+                        className="group-hover:scale-110 transition-transform object-contain"
                     />
                     <div className="flex flex-col leading-none">
                         <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold" style={{ color: 'var(--sub-color)' }}>monkey see</span>
