@@ -149,35 +149,42 @@ const AboutPage: React.FC = () => {
     ];
 
     return (
-        <div className="max-w-4xl mx-auto py-16 px-6 animate-in fade-in duration-700">
-            <header className="mb-16 text-center">
-                <h1 className="text-4xl font-black mb-4 uppercase tracking-tighter">BoniTypes</h1>
-                <div className="text-sm font-mono opacity-40 uppercase tracking-[0.4em]">about & community</div>
+        <div className="max-w-4xl mx-auto py-20 px-6 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <header className="mb-24 text-center">
+                <h1 className="text-6xl font-black mb-4 uppercase tracking-tighter gradient-text">BoniTypes</h1>
+                <div className="text-xs font-black uppercase tracking-[0.6em] opacity-20">about & community</div>
             </header>
 
-            <div className="grid gap-8">
+            <div className="grid gap-10">
                 {sections.map(section => (
                     <section
                         key={section.id}
                         id={section.id}
-                        className="p-8 rounded-2xl bg-black/10 border border-white/5 hover:border-white/10 transition-all group"
+                        className="premium-card p-10 group relative overflow-hidden"
                     >
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="p-3 rounded-xl bg-black/20 group-hover:text-main transition-colors" style={{ color: 'var(--main-color)' }}>
-                                {section.icon}
-                            </div>
-                            <h2 className="text-xl font-bold uppercase tracking-tight">{section.title}</h2>
+                        {/* Subtle background icon for section decoration */}
+                        <div className="absolute -top-6 -right-6 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 pointer-events-none">
+                            {React.cloneElement(section.icon as React.ReactElement, { size: 128 } as any)}
                         </div>
-                        <div className="text-sub-color leading-relaxed" style={{ color: 'var(--text-color)' }}>
-                            {section.content}
+
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-5 mb-8">
+                                <div className="p-4 rounded-2xl bg-black/20 group-hover:text-main transition-all group-hover:scale-110 duration-500" style={{ color: 'var(--main-color)' }}>
+                                    {section.icon}
+                                </div>
+                                <h2 className="text-2xl font-black uppercase tracking-tight">{section.title}</h2>
+                            </div>
+                            <div className="text-sub-color leading-relaxed text-lg" style={{ color: 'var(--text-color)' }}>
+                                {section.content}
+                            </div>
                         </div>
                     </section>
                 ))}
             </div>
 
-            <footer className="mt-24 pt-12 border-t border-white/5 text-center">
-                <div className="text-xs font-bold uppercase tracking-[0.5em] opacity-20">
-                    made with love by Boni Yeamin
+            <footer className="mt-32 pt-16 border-t border-white/5 text-center">
+                <div className="text-xs font-black uppercase tracking-[0.8em] opacity-10 py-4">
+                    made with passion by Boni Yeamin
                 </div>
             </footer>
         </div>

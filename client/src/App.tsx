@@ -30,14 +30,35 @@ function App() {
               <Route path="/about" element={<About />} />
             </Routes>
           </main>
-          <footer className="max-w-6xl mx-auto py-8 px-4 text-center text-sm" style={{ color: 'var(--sub-color)' }}>
-            <div className="flex items-center justify-center gap-6">
-              <Link to="/about" className="hover:text-text transition-colors">about</Link>
-              <a href="https://github.com" className="hover:text-text transition-colors">github</a>
-              <a href="https://twitter.com" className="hover:text-text transition-colors">twitter</a>
-              <Link to="/security-policy" className="hover:text-text transition-colors">security policy</Link>
-              <Link to="/terms" className="hover:text-text transition-colors">terms</Link>
-              <Link to="/privacy" className="hover:text-text transition-colors">privacy</Link>
+          <footer className="max-w-6xl mx-auto py-12 px-4 mt-auto">
+            <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 text-xs font-bold uppercase tracking-[0.2em] opacity-30 hover:opacity-60 transition-opacity">
+              <Link to="/about" className="hover:text-main transition-colors flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-main"></span>
+                about
+              </Link>
+              <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-main transition-colors flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-main"></span>
+                github
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-main transition-colors flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-main"></span>
+                twitter
+              </a>
+              <Link to="/security-policy" className="hover:text-main transition-colors flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-main"></span>
+                security policy
+              </Link>
+              <Link to="/terms" className="hover:text-main transition-colors flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-main"></span>
+                terms
+              </Link>
+              <Link to="/privacy" className="hover:text-main transition-colors flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-main"></span>
+                privacy
+              </Link>
+            </div>
+            <div className="mt-8 text-[10px] font-black uppercase tracking-[0.5em] opacity-10 text-center">
+              bonitypes v1.1.0
             </div>
           </footer>
         </div>

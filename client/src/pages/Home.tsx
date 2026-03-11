@@ -27,8 +27,14 @@ const Home: React.FC = () => {
     );
 
     return (
-        <div className="flex-grow flex items-center justify-center -mt-20">
-            <TypingTest text={text} />
+        <div className="flex-grow flex flex-col items-center justify-center relative overflow-hidden">
+            {/* Ambient Background Glows */}
+            <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-main/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none animate-pulse duration-[10s]"></div>
+            <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-main/5 rounded-full blur-[100px] -translate-y-1/2 pointer-events-none animate-pulse duration-[8s] delay-1000"></div>
+
+            <div className="relative z-10 w-full">
+                <TypingTest text={text} />
+            </div>
         </div>
     );
 };
