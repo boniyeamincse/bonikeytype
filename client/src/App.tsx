@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './pages/Home';
@@ -8,11 +7,12 @@ import Profile from './pages/Profile';
 import Leaderboard from './pages/Leaderboard';
 import Multiplayer from './pages/Multiplayer';
 import SecurityPolicy from './pages/SecurityPolicy';
-import { ThemeProvider } from './store/ThemeContext';
+import Settings from './pages/Settings';
+import { SettingsProvider } from './store/SettingsContext';
 
 function App() {
   return (
-    <ThemeProvider>
+    <SettingsProvider>
       <Router>
         <div className="min-h-screen flex flex-col font-mono">
           <Header />
@@ -25,7 +25,7 @@ function App() {
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/multiplayer" element={<Multiplayer />} />
               <Route path="/security-policy" element={<SecurityPolicy />} />
-              <Route path="/settings" element={<div className="text-center mt-20" style={{ color: 'var(--sub-color)' }}>Settings Page (Coming Soon)</div>} />
+              <Route path="/settings" element={<Settings />} />
             </Routes>
           </main>
           <footer className="max-w-6xl mx-auto py-8 px-4 text-center text-sm" style={{ color: 'var(--sub-color)' }}>
@@ -39,7 +39,7 @@ function App() {
           </footer>
         </div>
       </Router>
-    </ThemeProvider>
+    </SettingsProvider>
   );
 }
 

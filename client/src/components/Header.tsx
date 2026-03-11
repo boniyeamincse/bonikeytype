@@ -1,9 +1,9 @@
-import { useTheme } from '../store/ThemeContext';
+import { useSettings } from '../store/SettingsContext';
 import { Keyboard, Trophy, User, Settings as SettingsIcon, Swords } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Header: React.FC = () => {
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme } = useSettings();
 
     return (
         <header className="max-w-6xl mx-auto py-10 px-6 flex items-center justify-between animate-in fade-in duration-700">

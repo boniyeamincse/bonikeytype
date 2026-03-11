@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useTypingEngine } from '../hooks/useTypingEngine';
+import { useSettings } from '../store/SettingsContext';
 import { RefreshCw } from 'lucide-react';
 
 interface TypingTestProps {
@@ -8,6 +9,7 @@ interface TypingTestProps {
 
 const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
     const { userInput, isFinished, stats, handleKeyDown, reset, timeLeft } = useTypingEngine(text);
+    const { fontSize, caretStyle, blindMode, quickRestart } = useSettings();
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -16,6 +18,11 @@ const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
         focusInput();
 
         const handleGlobalKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Tab' && quickRestart) {
+                e.preventDefault();
+                reset();
+                return;
+            }
             if (e.key === 'Tab') {
                 e.preventDefault();
             }
@@ -50,13 +57,14 @@ const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
         return chars.map((char, i) => {
             let status = 'untyped';
             if (i < inputChars.length) {
-                status = inputChars[i] === char ? 'correct' : 'incorrect';
+                const isCorrect = inputChars[i] === char;
+                status = isCorrect ? 'correct' : (blindMode ? 'untyped' : 'incorrect');
             }
 
             return (
                 <span key={i} className={`char ${status}`}>
                     {i === inputChars.length && !isFinished && (
-                        <span className="caret"></span>
+                        <span className={`caret caret-${caretStyle}`}></span>
                     )}
                     {char}
                 </span>
@@ -123,7 +131,10 @@ const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
                     {timeLeft}
                 </div>
 
-                <div className="typing-text mono relative select-none animate-in fade-in slide-in-from-bottom-2 duration-700">
+                <div
+                    className="typing-text mono relative select-none animate-in fade-in slide-in-from-bottom-2 duration-700"
+                    style={{ fontSize: `${fontSize}px`, lineHeight: '1.5em' }}
+                >
                     {timeLeft < 30 && userInput.length > 0 && (
                         <div className="absolute -top-16 left-0 text-3xl font-bold transition-all" style={{ color: 'var(--main-color)' }}>
                             {timeLeft}
