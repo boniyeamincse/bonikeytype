@@ -9,10 +9,14 @@ const Header: React.FC = () => {
         <header className="max-w-6xl mx-auto py-10 px-6 flex items-center justify-between animate-in fade-in duration-700">
             <div className="flex items-center gap-8">
                 <Link to="/" className="flex items-center gap-3 group transition-all">
-                    <Keyboard size={28} style={{ color: 'var(--main-color)' }} className="group-hover:scale-110 transition-transform" />
+                    <img
+                        src="/assets/logo.png"
+                        alt="BoniTypes Logo"
+                        className="w-7 h-7 group-hover:scale-110 transition-transform object-contain mix-blend-screen"
+                    />
                     <div className="flex flex-col leading-none">
-                        <span className="text-xs uppercase tracking-widest opacity-50 font-bold" style={{ color: 'var(--sub-color)' }}>monkey see</span>
-                        <span className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-color)' }}>bonikeytype</span>
+                        <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold" style={{ color: 'var(--sub-color)' }}>monkey see</span>
+                        <span className="text-xl font-bold tracking-tight lowercase" style={{ color: 'var(--text-color)' }}>bonitypes</span>
                     </div>
                 </Link>
 
