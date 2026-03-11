@@ -1,39 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import TypingTest from '../components/TypingTest';
-import api from '../utils/api';
+import AdsPlaceholder from '../components/AdsPlaceholder';
+import { useSettings } from '../store/SettingsContext';
+import { modifyWordset, sampleWords } from '../utils/TestModifiers';
 
 const Home: React.FC = () => {
-    const [text, setText] = useState<string>("the quick brown fox jumps over the lazy dog");
-    const [loading, setLoading] = useState(true);
+    const { includePunctuation, includeNumbers } = useSettings();
 
-    useEffect(() => {
-        const fetchQuote = async () => {
-            try {
-                const res = await api.get('/quotes/random');
-                setText(res.data.text);
-            } catch (err) {
-                console.error("Failed to fetch quote", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchQuote();
-    }, []);
-
-    if (loading) return (
-        <div className="flex justify-center items-center">
-            <div className="w-8 h-8 rounded-full border-4 border-sub-color border-t-main-color animate-spin" style={{ borderColor: 'var(--sub-color)', borderTopColor: 'var(--main-color)' }}></div>
-        </div>
-    );
+    const text = useMemo(() => {
+        const modified = modifyWordset(sampleWords, {
+            includePunctuation,
+            includeNumbers
+        });
+        return modified.join(' ');
+    }, [includePunctuation, includeNumbers]);
 
     return (
-        <div className="flex-grow flex flex-col items-center justify-center relative overflow-hidden">
+        <div className="flex-grow flex flex-col pt-20">
             {/* Ambient Background Glows */}
             <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-main/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none animate-pulse duration-[10s]"></div>
             <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-main/5 rounded-full blur-[100px] -translate-y-1/2 pointer-events-none animate-pulse duration-[8s] delay-1000"></div>
 
             <div className="relative z-10 w-full">
-                <TypingTest text={text} />
+                <TypingTest text={text} key={text} />
+            </div>
+            <div className="mt-auto">
+                <AdsPlaceholder />
             </div>
         </div>
     );

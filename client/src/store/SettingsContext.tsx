@@ -12,6 +12,10 @@ interface Settings {
     difficulty: Difficulty;
     quickRestart: QuickRestartKey;
     blindMode: boolean;
+    focusMode: boolean;
+    showAds: boolean;
+    includePunctuation: boolean;
+    includeNumbers: boolean;
 }
 
 interface SettingsContextType extends Settings {
@@ -21,6 +25,10 @@ interface SettingsContextType extends Settings {
     setDifficulty: (diff: Difficulty) => void;
     setQuickRestart: (key: QuickRestartKey) => void;
     setBlindMode: (value: boolean) => void;
+    setFocusMode: (value: boolean) => void;
+    setShowAds: (value: boolean) => void;
+    setIncludePunctuation: (value: boolean) => void;
+    setIncludeNumbers: (value: boolean) => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -41,7 +49,11 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             caretStyle: 'line',
             difficulty: 'normal',
             quickRestart: 'tab',
-            blindMode: false
+            blindMode: false,
+            focusMode: false,
+            showAds: true,
+            includePunctuation: false,
+            includeNumbers: false
         };
     });
 
@@ -59,6 +71,10 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const setDifficulty = (difficulty: Difficulty) => updateSetting('difficulty', difficulty);
     const setQuickRestart = (quickRestart: QuickRestartKey) => updateSetting('quickRestart', quickRestart);
     const setBlindMode = (blindMode: boolean) => updateSetting('blindMode', blindMode);
+    const setFocusMode = (focusMode: boolean) => updateSetting('focusMode', focusMode);
+    const setShowAds = (showAds: boolean) => updateSetting('showAds', showAds);
+    const setIncludePunctuation = (includePunctuation: boolean) => updateSetting('includePunctuation', includePunctuation);
+    const setIncludeNumbers = (includeNumbers: boolean) => updateSetting('includeNumbers', includeNumbers);
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', settings.theme === 'default' ? '' : settings.theme);
@@ -72,7 +88,11 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             setCaretStyle,
             setDifficulty,
             setQuickRestart,
-            setBlindMode
+            setBlindMode,
+            setFocusMode,
+            setShowAds,
+            setIncludePunctuation,
+            setIncludeNumbers
         }}>
             {children}
         </SettingsContext.Provider>

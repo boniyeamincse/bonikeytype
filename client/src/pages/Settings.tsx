@@ -16,7 +16,11 @@ const SettingsPage: React.FC = () => {
         caretStyle, setCaretStyle,
         quickRestart, setQuickRestart,
         blindMode, setBlindMode,
-        difficulty, setDifficulty
+        difficulty, setDifficulty,
+        focusMode, setFocusMode,
+        showAds, setShowAds,
+        includePunctuation, setIncludePunctuation,
+        includeNumbers, setIncludeNumbers
     } = useSettings();
 
     const [activeCategory, setActiveCategory] = useState('behavior');
@@ -160,6 +164,34 @@ const SettingsPage: React.FC = () => {
                                         )}
                                         <div className="p-6 rounded-2xl bg-black/10 border border-white/5 hover:bg-black/20 transition-all group flex items-center justify-between">
                                             <div className="max-w-md">
+                                                <div className="font-black uppercase tracking-tight text-lg">punctuation</div>
+                                                <div className="text-sm opacity-30 font-bold mt-1">inject symbols and capitalization into the test.</div>
+                                            </div>
+                                            <button
+                                                onClick={() => setIncludePunctuation(!includePunctuation)}
+                                                className={`w-16 h-8 rounded-full transition-all relative ${includePunctuation ? 'bg-main' : 'bg-sub/20'}`}
+                                                style={{ backgroundColor: includePunctuation ? 'var(--main-color)' : 'var(--sub-color)', opacity: includePunctuation ? 1 : 0.3 }}
+                                            >
+                                                <div className={`absolute top-1.5 w-5 h-5 bg-bg rounded-full transition-all shadow-md ${includePunctuation ? 'right-1.5' : 'left-1.5'}`} style={{ backgroundColor: 'var(--bg-color)' }} />
+                                            </button>
+                                        </div>
+
+                                        <div className="p-6 rounded-2xl bg-black/10 border border-white/5 hover:bg-black/20 transition-all group flex items-center justify-between">
+                                            <div className="max-w-md">
+                                                <div className="font-black uppercase tracking-tight text-lg">numbers</div>
+                                                <div className="text-sm opacity-30 font-bold mt-1">inject random digits into the typing test.</div>
+                                            </div>
+                                            <button
+                                                onClick={() => setIncludeNumbers(!includeNumbers)}
+                                                className={`w-16 h-8 rounded-full transition-all relative ${includeNumbers ? 'bg-main' : 'bg-sub/20'}`}
+                                                style={{ backgroundColor: includeNumbers ? 'var(--main-color)' : 'var(--sub-color)', opacity: includeNumbers ? 1 : 0.3 }}
+                                            >
+                                                <div className={`absolute top-1.5 w-5 h-5 bg-bg rounded-full transition-all shadow-md ${includeNumbers ? 'right-1.5' : 'left-1.5'}`} style={{ backgroundColor: 'var(--bg-color)' }} />
+                                            </button>
+                                        </div>
+
+                                        <div className="p-6 rounded-2xl bg-black/10 border border-white/5 hover:bg-black/20 transition-all group flex items-center justify-between">
+                                            <div className="max-w-md">
                                                 <div className="font-black uppercase tracking-tight text-lg">blind mode</div>
                                                 <div className="text-sm opacity-30 font-bold mt-1">no errors or incorrect words are highlighted.</div>
                                             </div>
@@ -169,6 +201,34 @@ const SettingsPage: React.FC = () => {
                                                 style={{ backgroundColor: blindMode ? 'var(--main-color)' : 'var(--sub-color)', opacity: blindMode ? 1 : 0.3 }}
                                             >
                                                 <div className={`absolute top-1.5 w-5 h-5 bg-bg rounded-full transition-all shadow-md ${blindMode ? 'right-1.5' : 'left-1.5'}`} style={{ backgroundColor: 'var(--bg-color)' }} />
+                                            </button>
+                                        </div>
+
+                                        <div className="p-6 rounded-2xl bg-black/10 border border-white/5 hover:bg-black/20 transition-all group flex items-center justify-between">
+                                            <div className="max-w-md">
+                                                <div className="font-black uppercase tracking-tight text-lg">focus mode</div>
+                                                <div className="text-sm opacity-30 font-bold mt-1">hides the UI elements while typing.</div>
+                                            </div>
+                                            <button
+                                                onClick={() => setFocusMode(!focusMode)}
+                                                className={`w-16 h-8 rounded-full transition-all relative ${focusMode ? 'bg-main' : 'bg-sub/20'}`}
+                                                style={{ backgroundColor: focusMode ? 'var(--main-color)' : 'var(--sub-color)', opacity: focusMode ? 1 : 0.3 }}
+                                            >
+                                                <div className={`absolute top-1.5 w-5 h-5 bg-bg rounded-full transition-all shadow-md ${focusMode ? 'right-1.5' : 'left-1.5'}`} style={{ backgroundColor: 'var(--bg-color)' }} />
+                                            </button>
+                                        </div>
+
+                                        <div className="p-6 rounded-2xl bg-black/10 border border-white/5 hover:bg-black/20 transition-all group flex items-center justify-between">
+                                            <div className="max-w-md">
+                                                <div className="font-black uppercase tracking-tight text-lg">advertisements</div>
+                                                <div className="text-sm opacity-30 font-bold mt-1">shows non-intrusive placeholders to support development.</div>
+                                            </div>
+                                            <button
+                                                onClick={() => setShowAds(!showAds)}
+                                                className={`w-16 h-8 rounded-full transition-all relative ${showAds ? 'bg-main' : 'bg-sub/20'}`}
+                                                style={{ backgroundColor: showAds ? 'var(--main-color)' : 'var(--sub-color)', opacity: showAds ? 1 : 0.3 }}
+                                            >
+                                                <div className={`absolute top-1.5 w-5 h-5 bg-bg rounded-full transition-all shadow-md ${showAds ? 'right-1.5' : 'left-1.5'}`} style={{ backgroundColor: 'var(--bg-color)' }} />
                                             </button>
                                         </div>
                                     </div>

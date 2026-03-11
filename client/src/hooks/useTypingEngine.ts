@@ -92,15 +92,51 @@ export const useTypingEngine = (text: string, duration: number = 30, difficulty:
         };
     }, [startTime, isFinished, duration, calculateStats]);
 
+    const updateLiveStats = useCallback((currentInput: string) => {
+        if (!startTime) return;
+
+        const now = Date.now();
+        const timeElapsed = (now - startTime) / 1000 / 60; // in minutes
+        if (timeElapsed <= 0.001) return; // avoid division by near-zero
+
+        const words = currentInput.length / 5;
+        const rawWpm = Math.round(words / timeElapsed);
+
+        let errors = 0;
+        const inputChars = currentInput.split('');
+        const originalChars = text.split('');
+
+        inputChars.forEach((char, i) => {
+            if (char !== originalChars[i]) errors++;
+        });
+
+        const correctChars = currentInput.length - errors;
+        const wpm = Math.round((correctChars / 5) / timeElapsed);
+        const accuracy = currentInput.length > 0 ? Math.round((correctChars / currentInput.length) * 100) : 100;
+
+        setStats({
+            wpm: Math.max(0, wpm),
+            accuracy,
+            rawWpm: Math.max(0, rawWpm),
+            errors,
+            time: Math.round(timeElapsed * 60),
+            chars: currentInput.length
+        });
+    }, [startTime, text]);
+
     const handleKeyDown = (char: string) => {
         if (isFinished || isFailed) return;
 
+        let newStartTime = startTime;
         if (!startTime) {
-            setStartTime(Date.now());
+            newStartTime = Date.now();
+            setStartTime(newStartTime);
         }
 
         if (char === 'Backspace') {
-            setUserInput(prev => prev.slice(0, -1));
+            const nextInput = userInput.slice(0, -1);
+            setUserInput(nextInput);
+            updateLiveStats(nextInput);
         } else if (char.length === 1) {
             const currentIdx = userInput.length;
             const expectedChar = text[currentIdx];
@@ -130,8 +166,11 @@ export const useTypingEngine = (text: string, duration: number = 30, difficulty:
                 }
             }
 
-            setUserInput(prev => prev + char);
-            if (userInput.length + 1 >= text.length) {
+            const nextInput = userInput + char;
+            setUserInput(nextInput);
+            updateLiveStats(nextInput);
+
+            if (nextInput.length >= text.length) {
                 setEndTime(Date.now());
                 setIsFinished(true);
             }

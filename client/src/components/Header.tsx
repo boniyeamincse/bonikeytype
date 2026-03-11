@@ -1,9 +1,23 @@
-import { useSettings, Theme } from '../store/SettingsContext';
+import React from 'react';
+import { useSettings } from '../store/SettingsContext';
+import type { Theme } from '../store/SettingsContext';
 import { Keyboard, Trophy, User, Settings as SettingsIcon, Swords } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Header: React.FC = () => {
-    const { theme, setTheme } = useSettings();
+    const { theme, setTheme, focusMode } = useSettings();
+    // We need to know if typing has started. This is tricky without a global state.
+    // However, we can use a simpler approach: check for a global data attribute.
+    const [isTyping, setIsTyping] = React.useState(false);
+
+    React.useEffect(() => {
+        const observer = new MutationObserver(() => {
+            const typingVal = document.body.getAttribute('data-is-typing') === 'true';
+            setIsTyping(typingVal);
+        });
+        observer.observe(document.body, { attributes: true });
+        return () => observer.disconnect();
+    }, []);
 
     const themes: { name: string; id: Theme }[] = [
         { name: 'serika dark', id: 'default' },
@@ -12,8 +26,10 @@ const Header: React.FC = () => {
         { name: 'light', id: 'light' },
     ];
 
+    const hideHeader = focusMode && isTyping;
+
     return (
-        <header className="max-w-6xl mx-auto py-12 px-6 flex items-center justify-between animate-in fade-in duration-1000">
+        <header className={`max-w-6xl mx-auto py-12 px-6 flex items-center justify-between transition-all duration-500 ${hideHeader ? 'opacity-0 -translate-y-12 pointer-events-none' : 'animate-in fade-in duration-1000'}`}>
             <div className="flex items-center gap-10">
                 <Link to="/" className="flex items-center gap-4 group transition-all relative">
                     {/* Subtle Glow behind Logo */}
@@ -26,7 +42,7 @@ const Header: React.FC = () => {
                         className="group-hover:scale-110 transition-transform object-contain relative z-10"
                     />
                     <div className="flex flex-col leading-none relative z-10">
-                        <span className="text-[10px] font-black uppercase tracking-[0.6em] opacity-30 group-hover:opacity-50 transition-opacity" style={{ color: 'var(--sub-color)' }}>monkey see</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.6em] opacity-30 group-hover:opacity-50 transition-opacity" style={{ color: 'var(--sub-color)' }}>type what you see</span>
                         <span className="text-2xl font-black tracking-tighter lowercase gradient-text">bonitypes</span>
                     </div>
                 </Link>

@@ -8,7 +8,7 @@ interface TypingTestProps {
 }
 
 const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
-    const { fontSize, caretStyle, blindMode, quickRestart, difficulty } = useSettings();
+    const { fontSize, caretStyle, blindMode, quickRestart, difficulty, focusMode, showAds } = useSettings();
     const { userInput, isFinished, isFailed, stats, handleKeyDown, reset, timeLeft } = useTypingEngine(text, 30, difficulty);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -16,6 +16,12 @@ const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
         const focusInput = () => inputRef.current?.focus();
         window.addEventListener('click', focusInput);
         focusInput();
+
+        if (userInput.length > 0 && !isFinished) {
+            document.body.setAttribute('data-is-typing', 'true');
+        } else {
+            document.body.setAttribute('data-is-typing', 'false');
+        }
 
         const handleGlobalKeyDown = (e: KeyboardEvent) => {
             const isRestartKey =
@@ -136,10 +142,13 @@ const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
         );
     }
 
+    const isTyping = userInput.length > 0 && !isFinished;
+    const hideUI = focusMode && isTyping;
+
     return (
         <div className="max-w-6xl mx-auto flex flex-col items-center justify-center px-4 relative min-h-[80vh] w-full">
-            {/* Mode Indicator - Monkeytype Style */}
-            <div className="mb-20 flex items-center gap-10 bg-black/20 px-10 py-4 rounded-3xl border border-white/5 backdrop-blur-xl self-center shadow-2xl animate-in fade-in slide-in-from-top-8 duration-1000">
+            {/* Mode Indicator - BoniTypes Style */}
+            <div className={`mb-20 flex items-center gap-10 bg-black/20 px-10 py-4 rounded-3xl border border-white/5 backdrop-blur-xl self-center shadow-2xl transition-all duration-500 ${hideUI ? 'opacity-0 -translate-y-8 pointer-events-none' : 'animate-in fade-in slide-in-from-top-8 duration-1000'}`}>
                 <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.3em] opacity-40">
                     <span style={{ color: 'var(--main-color)' }} className="cursor-pointer opacity-100 flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-main"></span>
@@ -157,13 +166,25 @@ const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
                 </div>
             </div>
 
+            {/* Live Stats Display */}
+            <div className={`absolute top-1/4 left-0 right-0 flex justify-center gap-12 transition-all duration-700 ${isTyping && !hideUI ? 'opacity-20' : 'opacity-0'}`}>
+                <div className="flex flex-col items-center">
+                    <span className="text-[10px] font-black uppercase tracking-widest opacity-40">wpm</span>
+                    <span className="text-2xl font-black" style={{ color: 'var(--main-color)' }}>{stats.wpm}</span>
+                </div>
+                <div className="flex flex-col items-center">
+                    <span className="text-[10px] font-black uppercase tracking-widest opacity-40">acc</span>
+                    <span className="text-2xl font-black" style={{ color: 'var(--main-color)' }}>{stats.accuracy}%</span>
+                </div>
+            </div>
+
             <div className="w-full relative py-10">
                 <div
                     className="typing-text mono relative select-none animate-in fade-in slide-in-from-bottom-4 duration-1000 filter drop-shadow-sm"
                     style={{ fontSize: `${fontSize}px`, lineHeight: '1.5em' }}
                 >
                     {timeLeft < 30 && userInput.length > 0 && (
-                        <div className="absolute -top-24 left-0 text-5xl font-black italic transition-all animate-bounce" style={{ color: 'var(--main-color)', opacity: 0.1 }}>
+                        <div className={`absolute -top-24 left-0 text-5xl font-black italic transition-all duration-500 ${hideUI ? 'opacity-10 scale-150' : 'opacity-10 animate-pulse'}`} style={{ color: 'var(--main-color)' }}>
                             {timeLeft}
                         </div>
                     )}
@@ -179,7 +200,18 @@ const TypingTest: React.FC<TypingTestProps> = ({ text }) => {
                 />
             </div>
 
-            <div className="mt-32 flex flex-col items-center gap-12">
+            {/* Advertisements Placeholder */}
+            {showAds && !isTyping && (
+                <div className="mt-20 w-full max-w-2xl premium-card p-6 flex items-center justify-between animate-in fade-in duration-1000">
+                    <div>
+                        <div className="text-[10px] font-black uppercase tracking-[0.2em] opacity-30 mb-1">Sponsored / Announcement</div>
+                        <div className="text-sm font-bold opacity-80">BoniTypes Premium is coming soon! ✨</div>
+                    </div>
+                    <button className="px-5 py-2 rounded-xl bg-main/10 hover:bg-main/20 text-main text-[10px] font-black uppercase tracking-widest transition-all">Learn More</button>
+                </div>
+            )}
+
+            <div className={`mt-32 flex flex-col items-center gap-12 transition-all duration-500 ${hideUI ? 'opacity-0 translate-y-8 pointer-events-none' : ''}`}>
                 <button
                     onClick={reset}
                     title="restart (tab)"
